@@ -43,6 +43,16 @@ namespace WeatherWatcher
             services.AddTransient<IDeserializeService, DeserializeService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddHttpClient();
+            //services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(
+            //        builder =>
+            //        {
+            //            builder.WithOrigins("http://localhost:8080/", "http://localhost:8081/", "http://localhost:8082/");
+            //        });
+            //});
+
+            services.AddCors();
 
 
             services.AddSwaggerGen(c =>
@@ -64,6 +74,8 @@ namespace WeatherWatcher
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseAuthorization();
 
