@@ -60,13 +60,29 @@ namespace WeatherWatcher.Api.Services
                     {
                         date = hourlyForecasts[i].Date.Date;
 
-                        var weatherforecast = this._weatherForecastFactory
+                        WeatherForecast weatherforecast = null;
+
+                        if (i > 0)
+                        {
+                            weatherforecast = this._weatherForecastFactory
                             .WithDate(hourlyForecasts[i - 1].Date.Date)
                             .WithTemperature(Math.Ceiling(temp / tempCount))
                             .WithHumidity(Math.Ceiling(humidity / humidityCount))
                             .WithWindSpeed(Math.Ceiling(windSpeed / windSpeedCount))
                             .WithWeatherDescription(hourlyForecasts[i - 1].WeatherDescription)
                             .Build();
+                        }
+
+                        else
+                        {
+                            weatherforecast = this._weatherForecastFactory
+                            .WithDate(hourlyForecasts[i].Date.Date)
+                            .WithTemperature(hourlyForecasts[i].Temperature)
+                            .WithHumidity(hourlyForecasts[i].Humidity)
+                            .WithWindSpeed(hourlyForecasts[i].WindSpeed)
+                            .WithWeatherDescription(hourlyForecasts[i].WeatherDescription)
+                            .Build();
+                        }
 
                         dailyForecasts.Add(weatherforecast);
 
