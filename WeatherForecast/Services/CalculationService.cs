@@ -30,7 +30,7 @@ namespace WeatherWatcher.Api.Services
             {
                 var dailyForecasts = new List<WeatherForecast>();
 
-                var date = DateTime.Now.Date;
+                var dateNow = DateTime.Now.ToShortDateString();
 
                 //a model to be created out of this
                 decimal temp = 0;
@@ -45,7 +45,7 @@ namespace WeatherWatcher.Api.Services
 
                 for (int i = 0; i < hourlyForecasts.Count; i++)
                 {
-                    if (hourlyForecasts[i].Date.Date == date)
+                    if (hourlyForecasts[i].Date == dateNow)
                     {
                         temp += hourlyForecasts[i].Temperature;
                         humidity += hourlyForecasts[i].Humidity;
@@ -58,14 +58,15 @@ namespace WeatherWatcher.Api.Services
 
                     else
                     {
-                        date = hourlyForecasts[i].Date.Date;
+                        dateNow = hourlyForecasts[i].Date;
 
                         WeatherForecast weatherforecast = null;
 
                         if (i > 0)
                         {
                             weatherforecast = this._weatherForecastFactory
-                            .WithDate(hourlyForecasts[i - 1].Date.Date)
+                            .WithCity(hourlyForecasts[i].City)
+                            .WithDate(hourlyForecasts[i - 1].Date)
                             .WithTemperature(Math.Ceiling(temp / tempCount))
                             .WithHumidity(Math.Ceiling(humidity / humidityCount))
                             .WithWindSpeed(Math.Ceiling(windSpeed / windSpeedCount))
@@ -76,10 +77,11 @@ namespace WeatherWatcher.Api.Services
                         else
                         {
                             weatherforecast = this._weatherForecastFactory
-                            .WithDate(hourlyForecasts[i].Date.Date)
-                            .WithTemperature(hourlyForecasts[i].Temperature)
-                            .WithHumidity(hourlyForecasts[i].Humidity)
-                            .WithWindSpeed(hourlyForecasts[i].WindSpeed)
+                            .WithCity(hourlyForecasts[i].City)
+                            .WithDate(hourlyForecasts[i].Date)
+                            .WithTemperature(Math.Ceiling(hourlyForecasts[i].Temperature))
+                            .WithHumidity(Math.Ceiling(hourlyForecasts[i].Humidity))
+                            .WithWindSpeed(Math.Ceiling(hourlyForecasts[i].WindSpeed))
                             .WithWeatherDescription(hourlyForecasts[i].WeatherDescription)
                             .Build();
                         }
@@ -105,7 +107,7 @@ namespace WeatherWatcher.Api.Services
                 {
 
                     var lastWeatherForecast = this._weatherForecastFactory
-                        .WithDate(hourlyForecasts[hourlyForecasts.Count - 1].Date.Date)
+                        .WithDate(hourlyForecasts[hourlyForecasts.Count - 1].Date)
                         .WithTemperature(Math.Ceiling(temp / tempCount))
                         .WithHumidity(Math.Ceiling(humidity / humidityCount))
                         .WithWindSpeed(Math.Ceiling(windSpeed / windSpeedCount))

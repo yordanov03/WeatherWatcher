@@ -7,6 +7,9 @@ namespace WeatherWatcher.Models
     {
         [JsonPropertyName("list")]
         public List<Forecast> Forecasts { get; set; }
+
+        [JsonPropertyName("city")]
+        public CityInfo CityInfo { get; set; }
     }
 
     public class Forecast
@@ -44,4 +47,11 @@ namespace WeatherWatcher.Models
         [JsonPropertyName("description")]
         public string WeatherDescription { get; set; }
     }
+
+    public class CityInfo
+    {
+        [JsonPropertyName("name")]
+        public string CityName { get; set; }
+    }
+
 }

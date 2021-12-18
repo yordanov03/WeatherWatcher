@@ -15,7 +15,8 @@ namespace WeatherWatcher.Tests.Fakes
 
             public object Create(Type type) =>
                 new WeatherForecast(
-                        DateTime.Now,
+                        "Bonn",
+                        DateTime.Now.ToShortDateString(),
                         12,
                         86,
                         2,
