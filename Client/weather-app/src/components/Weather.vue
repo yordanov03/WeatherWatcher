@@ -27,7 +27,7 @@
       </div>
         <div class="weather-container">
             <div
-                v-for="(weather, index) in weathers"
+                v-for="(weather, index) in weatherForecast"
                 :key="weather.date"
             >
                 <div class="weather">
@@ -38,7 +38,7 @@
                         <small>
                             <small>CITY:</small>
                         </small>
-                        {{ city }}
+                        {{ weather.city }}
                         </div>
                         <div class="temp">
                         <small>
@@ -85,7 +85,7 @@
                                     <small>
                                         <small>CITY:</small>
                                     </small>
-                                    {{ city }}
+                                    {{ w.city }}
                                     </div>
                                     <div class="temp">
                                     <small>
@@ -139,7 +139,7 @@ export default {
     
     data () {
         return {
-            weathers: [],
+            weatherForecast: [],
             city: 'Bon',
             value: 'Bon',
             weatherHistory: [],
@@ -173,14 +173,14 @@ export default {
         })
         .then(response => {
           // reassign
-          this.weathers = response.data;
-          this.weathers.push({ 'newCity': this.city })
-          console.log(this.weathers)
-          const currentCity = this.city
-          this.addToLocalStorage(JSON.stringify({'currentCity': currentCity}), JSON.stringify(this.weathers))
+          this.weatherForecast = response.data;
+          // this.weatherForecast.push({ 'newCity': this.city })
+          console.log(this.Forecast)
+          // const currentCity = this.city
+          // this.addToLocalStorage(JSON.stringify({'currentCity': currentCity}), JSON.stringify(this.weatherForecast))
           // add more
 
-          this.weatherHistory.push(this.weathers)
+          this.weatherHistory.push(this.weatherForecast)
           this.addToLocalStorage('weather-history', JSON.stringify(this.weatherHistory))
           // this.history(this.city);
         })
@@ -199,7 +199,6 @@ export default {
     },
 
     invalidMessage () {
-        console.log('hete');
         this.showError = true;
         setTimeout(() => {
             this.showError = false;
