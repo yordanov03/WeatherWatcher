@@ -7,9 +7,9 @@
               <div class="col-12 col-md-9 mb-2 mb-md-0">
                 <input
                   type="text"
-                  v-model="city"
+                  v-model="inputValue"
                   class="search"
-                  placeholder="Enter a town, city or GR postcode..."
+                  placeholder="Enter a town, city or German postcode..."
                 />
               </div>
               <div class="search-button-container">
@@ -140,8 +140,8 @@ export default {
     data () {
         return {
             weatherForecast: [],
-            city: 'Bon',
-            value: 'Bon',
+            // city: 'Bon',
+            inputValue: 'Bon',
             weatherHistory: [],
             showError: false,
         }
@@ -150,10 +150,10 @@ export default {
     computed: {
         axiosParams() {
             const params = new URLSearchParams();
-            if (typeof(this.value) === 'string') {
-                params.append("city", this.city)
-            } else if (typeof(this.value) === 'number' && this.value.toString().length == 5){
-                params.append("zipCode", this.city);
+            if (typeof(this.inputValue) === 'string') {
+                params.append("city", this.inputValue)
+            } else if (typeof(this.inputValue) === 'number' && this.inputValue.toString().length == 5){
+                params.append("zipCode", this.inputValue);
             } else {
                 this.invalidMessage()
             }
@@ -185,8 +185,8 @@ export default {
           // this.history(this.city);
         })
         .catch(e => {
-        //   this.errors.push(e);
-        console.log(e)
+        this.errors.push(e);
+
         });
     },
 
@@ -194,8 +194,8 @@ export default {
       this.fetch();
     },
 
-    addToLocalStorage (nameOfElement, value) {
-      localStorage.setItem(nameOfElement, value)
+    addToLocalStorage (nameOfElement, inputValue) {
+      localStorage.setItem(nameOfElement, inputValue)
     },
 
     invalidMessage () {
