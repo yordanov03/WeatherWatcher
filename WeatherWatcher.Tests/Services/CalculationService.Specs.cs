@@ -16,15 +16,15 @@ namespace WeatherWatcher.Tests.Services
 {
     public class CalculationServiceSpecs
     {
-        private ICalculationService _calculationService;
+        private IForecastCalculationService _calculationService;
 
         public CalculationServiceSpecs()
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
             var mapper = config.CreateMapper();
             var weatherForecastFactory = new Mock<WeatherForecastFactory>();
-            var logger = new Mock<ILogger<CalculationService>>();
-            _calculationService = new CalculationService(weatherForecastFactory.Object, logger.Object, mapper);
+            var logger = new Mock<ILogger<ForecastCalculationService>>();
+            _calculationService = new ForecastCalculationService(weatherForecastFactory.Object, logger.Object, mapper);
         }
 
 

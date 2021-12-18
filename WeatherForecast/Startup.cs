@@ -33,14 +33,14 @@ namespace WeatherWatcher
 
             services.AddControllers();
 
-            var openWeatherConfig = Configuration.GetSection(OpenWeatherApiOptions.appOptions);
+            var openWeatherConfig = Configuration.GetSection(OpenWeatherApiOptions.AppOptions);
             services.Configure<OpenWeatherApiOptions>(openWeatherConfig);
 
             services.AddScoped<IForecastService, ForecastService>();
-            services.AddScoped<ICalculationService, CalculationService>();
+            services.AddScoped<IForecastCalculationService, ForecastCalculationService>();
             services.AddScoped<IWeatherForecastFactory, WeatherForecastFactory>();
             services.AddTransient<IOpenWeatherService, OpenWeatherService>();
-            services.AddTransient<IDeserializeService, DeserializeService>();
+            services.AddTransient<IWeatherDataProviderService, WeatherDataProviderService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddHttpClient();
             //services.AddCors(options =>

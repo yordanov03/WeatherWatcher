@@ -14,13 +14,13 @@ namespace WeatherWatcher.Api.Services
     {
         private readonly IHttpClientFactory _httpFactory;
         private readonly IWeatherForecastFactory _weatherForecastFactory;
-        private readonly IDeserializeService _deserializeService;
-        private readonly ILogger<CalculationService> _logger;
+        private readonly IWeatherDataProviderService _deserializeService;
+        private readonly ILogger<ForecastCalculationService> _logger;
 
         public OpenWeatherService(IHttpClientFactory httpFactory,
             IWeatherForecastFactory weatherForecastFactory,
-            IDeserializeService deserializeService,
-            ILogger<CalculationService> logger)
+            IWeatherDataProviderService deserializeService,
+            ILogger<ForecastCalculationService> logger)
         {
             this._httpFactory = httpFactory;
             this._weatherForecastFactory = weatherForecastFactory;
@@ -32,7 +32,7 @@ namespace WeatherWatcher.Api.Services
             var forecasts = new List<WeatherForecast>();
 
             // 1. Deserialize the response.
-            var openWeatherResponse = await this._deserializeService.DeserializeJson(url, cancellationToken);
+            var openWeatherResponse = await this._deserializeService.ParseWeatherData(url, cancellationToken);
 
             // 2. Build the list of forecasts
 

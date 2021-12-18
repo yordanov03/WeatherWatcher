@@ -20,7 +20,7 @@ namespace WeatherWatcher.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetWeatherForecast([FromQuery] SearchKey searchKey, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetWeatherForecast([FromQuery] SearchParams searchKey, CancellationToken cancellationToken)
         {
             var forecast = !string.IsNullOrEmpty(searchKey.City) ?
                 await this._weatherService.GetForecastByCityName(searchKey.City, cancellationToken) :

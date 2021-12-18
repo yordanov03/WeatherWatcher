@@ -34,7 +34,7 @@ namespace WeatherWatcher.Api.Common
 
             if (!string.IsNullOrEmpty(zipcode))
             {
-                validZipcode = Regex.IsMatch(zipcode, zipcodeRegex);
+                validZipcode = Regex.IsMatch(zipcode, ZipcodeRegex);
 
                 if (validZipcode)
                 {

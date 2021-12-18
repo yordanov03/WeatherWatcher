@@ -6,7 +6,6 @@ namespace WeatherWatcher.Api.Exceptions
     {
         public CalculationException(string message) : base(message)
         {
-
         }
 
     }

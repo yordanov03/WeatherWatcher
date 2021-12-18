@@ -4,8 +4,8 @@ using WeatherWatcher.Models;
 
 namespace WeatherWatcher.Api.Services.Contracts
 {
-    public interface IDeserializeService
+    public interface IWeatherDataProviderService
     {
-        Task<OpenWeatherResponse> DeserializeJson(string url, CancellationToken cancellationToken);
+        Task<OpenWeatherResponse> ParseWeatherData(string url, CancellationToken cancellationToken);
     }
 }
