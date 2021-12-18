@@ -21,6 +21,14 @@
                   Search
                 </button>
               </div>
+
+               <div
+                v-if="showError"
+                class="error-message"
+            >
+                Invalid name or zipcode
+            </div>
+
             </div>
           </form>
         </div>
@@ -121,12 +129,7 @@
                         </div>
                     </div>
             </div>
-            <div
-                v-if="showError"
-                class="error-message"
-            >
-                Invalid name or zipcode
-            </div>
+           
 </div>
  
 </template>
@@ -185,8 +188,8 @@ export default {
           // this.history(this.city);
         })
         .catch(e => {
-        this.errors.push(e);
-
+        // this.errors.push(e);
+        this.invalidMessage(e);
         });
     },
 
