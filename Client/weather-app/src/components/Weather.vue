@@ -143,7 +143,6 @@ export default {
     data () {
         return {
             weatherForecast: [],
-            // city: 'Bon',
             inputValue: 'Bonn',
             weatherHistory: [],
             showError: false,
@@ -176,20 +175,11 @@ export default {
           params: this.axiosParams
         })
         .then(response => {
-          // reassign
           this.weatherForecast = response.data;
-          // this.weatherForecast.push({ 'newCity': this.city })
-          // console.log(this.Forecast)
-          // const currentCity = this.city
-          // this.addToLocalStorage(JSON.stringify({'currentCity': currentCity}), JSON.stringify(this.weatherForecast))
-          // add more
-
           this.weatherHistory.push(this.weatherForecast)
           this.addToLocalStorage('weather-history', JSON.stringify(this.weatherHistory))
-          // this.history(this.city);
         })
         .catch(e => {
-        // this.errors.push(e);
         this.invalidMessage(e);
         });
     },
@@ -224,18 +214,14 @@ export default {
   align-items: center
 }
 .search {
-  /* width: 50%;
-  height: 1.3em;
-  padding-left: .4em; */
-  
 
-    border: 1px solid grey;
-    border-radius: 5px;
-    height: 1.3em;
-    width:20%;
-    padding: 2px 10px 2px 10px;
-    outline: 0;
-    background-color: #f5f5f5;
+ border: 1px solid grey;
+ border-radius: 5px;
+  height: 1.3em;
+  width:20%;
+  padding: 2px 10px 2px 10px;
+  outline: 0;
+  background-color: #f5f5f5;
 
 
 }
@@ -320,8 +306,6 @@ export default {
   -webkit-box-flex: 1;
   -ms-flex-positive: 1; 
   flex-grow: 1; 
-  /* background: url(https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy-day-1.svg)
-    50% 50% / contain no-repeat; */
 }
 
 .weather .current .icon .sunny{
