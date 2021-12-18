@@ -9,7 +9,7 @@
                   type="text"
                   v-model="inputValue"
                   class="search"
-                  placeholder="Enter a town, city or German postcode..."
+                  placeholder="Enter a city or German postcode..."
                 />
               </div>
               <div class="search-button-container">
@@ -70,7 +70,7 @@
                         <div>&nbsp;</div>
                     </div>
                     <div class="icon">
-                        <span class="wi-day-sunny"></span>
+                        <div :class=weather.weatherDescription></div>
                     </div>
                     </div>
                     <div class="future">
@@ -117,8 +117,8 @@
                                     <div>&nbsp;</div>
                                 </div>
                                 <div class="icon">
-                                    <span class="wi-day-sunny"></span>
-                                </div>
+                                    <!-- <div class="sunny"></div> -->
+                                     <div :class=w.weatherDescription></div>
                                 </div>
                                 <div class="future">
                                 <div class="day" :class="{ 'current-weather': index === 0 }">
@@ -129,7 +129,7 @@
                         </div>
                     </div>
             </div>
-           
+            </div>     
 </div>
  
 </template>
@@ -144,9 +144,10 @@ export default {
         return {
             weatherForecast: [],
             // city: 'Bon',
-            inputValue: 'Bon',
+            inputValue: 'Bonn',
             weatherHistory: [],
             showError: false,
+            overcastCloudy: 'snowy'
         }
     },
 
@@ -178,7 +179,7 @@ export default {
           // reassign
           this.weatherForecast = response.data;
           // this.weatherForecast.push({ 'newCity': this.city })
-          console.log(this.Forecast)
+          // console.log(this.Forecast)
           // const currentCity = this.city
           // this.addToLocalStorage(JSON.stringify({'currentCity': currentCity}), JSON.stringify(this.weatherForecast))
           // add more
@@ -208,6 +209,11 @@ export default {
         }, 5000);
     }
   },
+  determineAnimation(description){
+    if(description == 'overcast cloudy'){
+      this.overcastCloudy = 'cloudy'
+    }
+  }
 }
 </script>
 
@@ -218,9 +224,20 @@ export default {
   align-items: center
 }
 .search {
-  width: 50%;
+  /* width: 50%;
   height: 1.3em;
-  padding-left: .4em;
+  padding-left: .4em; */
+  
+
+    border: 1px solid grey;
+    border-radius: 5px;
+    height: 1.3em;
+    width:20%;
+    padding: 2px 10px 2px 10px;
+    outline: 0;
+    background-color: #f5f5f5;
+
+
 }
 .search-button-container {
   margin-top: 0.4em;
@@ -249,7 +266,17 @@ export default {
     flex-wrap: wrap;
 }
 .error-message {
-    color: red;
+    /* color: red; */
+  color: #D8000C;
+	background-color: #FFBABA;
+  padding: 30px !important;
+  border-radius: 45 !important;
+  position: relative; 
+  display: inline-block !important;
+  box-shadow: 1px 1px 1px #aaaaaa;
+  margin-top: 10px;
+  background-image: url('https://i.imgur.com/GnyDvKN.png');
+  background-repeat: no-repeat, repeat;
 }
 .weatherr-history-container {
     display: flex;
@@ -260,7 +287,8 @@ export default {
   flex-flow: column wrap;
   box-shadow: 0px 1px 10px 0px #cfcfcf;
   overflow: hidden;
-  background-image: url("http://www.prepbootstrap.com/Content/images/shared/misc/london-view.png");
+  background-image: url("https://cdn5.vectorstock.com/i/1000x1000/48/04/city-with-two-story-cartoon-house-vector-22694804.jpg");
+
   background-repeat: no-repeat, repeat;
   margin-right: 1em;
   border-radius: 10px;
@@ -292,7 +320,51 @@ export default {
   -webkit-box-flex: 1;
   -ms-flex-positive: 1; 
   flex-grow: 1; 
+  /* background: url(https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy-day-1.svg)
+    50% 50% / contain no-repeat; */
+}
+
+.weather .current .icon .sunny{
+  margin: 0;
+  width: 80px;
+  height: 80px; 
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1; 
+  flex-grow: 1;
+  background: url(https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg)
+    50% 50% / contain no-repeat;
+}
+
+.weather .current .icon .cloudy{
+  margin: 0;
+  width: 80px;
+  height: 80px; 
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1; 
+  flex-grow: 1;
   background: url(https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy-day-1.svg)
+    50% 50% / contain no-repeat;
+}
+
+.weather .current .icon .rainy{
+  margin: 0;
+  width: 80px;
+  height: 80px; 
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1; 
+  flex-grow: 1;
+  background: url(https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-7.svg)
+    50% 50% / contain no-repeat;
+}
+
+.weather .current .icon .snowy{
+  margin: 0;
+  width: 80px;
+  height: 80px; 
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1; 
+  flex-grow: 1;
+  background: url(https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/snowy-6.svg)
     50% 50% / contain no-repeat;
 }
 

@@ -70,7 +70,7 @@ namespace WeatherWatcher.Api.Services
                             .WithTemperature(Math.Ceiling(temp / tempCount))
                             .WithHumidity(Math.Ceiling(humidity / humidityCount))
                             .WithWindSpeed(Math.Ceiling(windSpeed / windSpeedCount))
-                            .WithWeatherDescription(hourlyForecasts[i - 1].WeatherDescription)
+                            .WithWeatherDescription(ModifyWeatherDescription(hourlyForecasts[i - 1].WeatherDescription))
                             .Build();
                         }
 
@@ -82,7 +82,7 @@ namespace WeatherWatcher.Api.Services
                             .WithTemperature(Math.Ceiling(hourlyForecasts[i].Temperature))
                             .WithHumidity(Math.Ceiling(hourlyForecasts[i].Humidity))
                             .WithWindSpeed(Math.Ceiling(hourlyForecasts[i].WindSpeed))
-                            .WithWeatherDescription(hourlyForecasts[i].WeatherDescription)
+                            .WithWeatherDescription(ModifyWeatherDescription(hourlyForecasts[i].WeatherDescription))
                             .Build();
                         }
 
@@ -111,7 +111,7 @@ namespace WeatherWatcher.Api.Services
                         .WithTemperature(Math.Ceiling(temp / tempCount))
                         .WithHumidity(Math.Ceiling(humidity / humidityCount))
                         .WithWindSpeed(Math.Ceiling(windSpeed / windSpeedCount))
-                        .WithWeatherDescription(hourlyForecasts[hourlyForecasts.Count - 1].WeatherDescription)
+                        .WithWeatherDescription(ModifyWeatherDescription(hourlyForecasts[hourlyForecasts.Count - 1].WeatherDescription))
                         .Build();
 
                     dailyForecasts.Add(lastWeatherForecast);
@@ -138,6 +138,32 @@ namespace WeatherWatcher.Api.Services
                 this._logger.LogError("Could not group forecasts");
                 throw new CalculationException("Oops something went wrong with calculation");
             }
+        }
+
+        private string ModifyWeatherDescription(string description)
+        {
+            var modifiedDescription = string.Empty;
+
+            if (description.Contains("cloudy") || description.Contains("clouds"))
+            {
+                modifiedDescription = "cloudy";
+            }
+
+            else if (description.Contains("rain") || description.Contains("rainy"))
+            {
+                modifiedDescription = "rainy";
+            }
+            else if (description.Contains("sun") || description.Contains("sunny") || description.Contains("clear"))
+            {
+                modifiedDescription = "sunny";
+            }
+
+            else if (description.Contains("snow") || description.Contains("snowy"))
+            {
+                modifiedDescription = "snowy";
+            }
+
+            return modifiedDescription;
         }
     }
 }

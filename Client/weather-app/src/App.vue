@@ -6,14 +6,14 @@
 </template>
 
 <script>
-import Header from './components/Header.vue'
 import Weather from './components/Weather.vue'
+import Header from './components/Header.vue'
 
 export default {
   name: 'App',
   components: {
-    Header,
     Weather,
+    Header
   },
 }
 </script>
