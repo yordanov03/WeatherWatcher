@@ -40,7 +40,8 @@ namespace WeatherWatcher.Api.Services
             {
 
                 var formattedForecast = this._weatherForecastFactory
-                    .WithDate(DateTime.Parse(forecast.Date))
+                    .WithCity(openWeatherResponse.CityInfo.CityName)
+                    .WithDate(DateTime.Parse(forecast.Date).ToShortDateString())
                     .WithTemperature(forecast.MainJsonData.Temperature)
                     .WithHumidity(forecast.MainJsonData.Humidity)
                     .WithWindSpeed(forecast.WindData.WindSpeed)

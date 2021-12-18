@@ -5,7 +5,8 @@ namespace WeatherWatcher.Api.Factories
 {
     public class WeatherForecastFactory : IWeatherForecastFactory
     {
-        private DateTime date;
+        private string city;
+        private string date;
         private decimal temperture;
         private decimal humidity;
         private decimal windSpeed;
@@ -14,6 +15,7 @@ namespace WeatherWatcher.Api.Factories
         public WeatherForecast Build()
         {
             return new WeatherForecast(
+                city,
                 date,
                 temperture,
                 humidity,
@@ -22,7 +24,12 @@ namespace WeatherWatcher.Api.Factories
             
         }
 
-        public IWeatherForecastFactory WithDate(DateTime date)
+        public IWeatherForecastFactory WithCity(string city)
+        {
+            this.city = city;
+            return this;
+        }
+        public IWeatherForecastFactory WithDate(string date)
         {
             this.date = date;
             return this;

@@ -5,7 +5,8 @@ namespace WeatherWatcher.Api.Factories
 {
     public interface IWeatherForecastFactory : IFactory<WeatherForecast>
     {
-        IWeatherForecastFactory WithDate(DateTime date);
+        IWeatherForecastFactory WithCity(string city);
+        IWeatherForecastFactory WithDate(string date);
         IWeatherForecastFactory WithTemperature(decimal temperature);
         IWeatherForecastFactory WithHumidity(decimal humidity);
         IWeatherForecastFactory WithWindSpeed(decimal windSpeed);
