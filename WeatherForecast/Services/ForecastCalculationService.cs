@@ -7,6 +7,8 @@ using WeatherWatcher.Api.Exceptions;
 using WeatherWatcher.Api.Factories;
 using WeatherWatcher.Api.Services.Contracts;
 using WeatherWatcher.Models;
+using static WeatherWatcher.Api.Common.Constants.WeatherDescriptionConstants;
+
 
 namespace WeatherWatcher.Api.Services
 {
@@ -30,7 +32,7 @@ namespace WeatherWatcher.Api.Services
             {
                 var dailyForecasts = new List<WeatherForecast>();
 
-                var datetoday = DateTime.Now.ToShortDateString();
+                var datetoday = DateTime.UtcNow.ToShortDateString();
 
                 //a model to be created out of this
                 decimal temp = 0;
@@ -141,21 +143,21 @@ namespace WeatherWatcher.Api.Services
         {
             var modifiedDescription = string.Empty;
 
-            if (description.Contains("cloudy") || description.Contains("clouds"))
+            if (description.Contains(Cloudy))
             {
                 modifiedDescription = "cloudy";
             }
 
-            else if (description.Contains("rain") || description.Contains("rainy"))
+            else if (description.Contains(Rainy))
             {
                 modifiedDescription = "rainy";
             }
-            else if (description.Contains("sun") || description.Contains("sunny") || description.Contains("clear"))
+            else if (description.Contains(Sunny) || description.Contains(Clear))
             {
                 modifiedDescription = "sunny";
             }
 
-            else if (description.Contains("snow") || description.Contains("snowy"))
+            else if (description.Contains(Snowy))
             {
                 modifiedDescription = "snowy";
             }

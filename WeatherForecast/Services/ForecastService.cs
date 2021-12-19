@@ -13,6 +13,7 @@ using static WeatherWatcher.Api.Common.Constants;
 
 namespace WeatherWatcher.Services
 {
+    //[ForecastServiceExceptionFilter]
     public class ForecastService : IForecastService
     {
         private readonly OpenWeatherApiOptions _options;
