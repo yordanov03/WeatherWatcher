@@ -13,7 +13,7 @@
             public const string Rainy = "rain";
             public const string Snowy = "snow";
             public const string Clear = "clear";
-            public const string Cloudy = "cloudy";
+            public const string Cloudy = "cloud";
         }
 
     }

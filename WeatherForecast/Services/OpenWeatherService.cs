@@ -12,7 +12,6 @@ namespace WeatherWatcher.Api.Services
 {
     public class OpenWeatherService : IOpenWeatherService
     {
-        private readonly IHttpClientFactory _httpFactory;
         private readonly IWeatherForecastFactory _weatherForecastFactory;
         private readonly IWeatherDataProviderService _deserializeService;
         private readonly ILogger<ForecastCalculationService> _logger;
@@ -22,7 +21,6 @@ namespace WeatherWatcher.Api.Services
             IWeatherDataProviderService deserializeService,
             ILogger<ForecastCalculationService> logger)
         {
-            this._httpFactory = httpFactory;
             this._weatherForecastFactory = weatherForecastFactory;
             this._deserializeService = deserializeService;
             this._logger = logger;
