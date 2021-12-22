@@ -1,6 +1,6 @@
 ﻿namespace WeatherWatcher.Api.Models
 {
-    public class SearchKey
+    public class SearchParams
     {
         public string City { get; set; }
 

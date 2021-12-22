@@ -12,19 +12,17 @@ namespace WeatherWatcher.Api.Services
 {
     public class OpenWeatherService : IOpenWeatherService
     {
-        private readonly IHttpClientFactory _httpFactory;
         private readonly IWeatherForecastFactory _weatherForecastFactory;
-        private readonly IDeserializeService _deserializeService;
-        private readonly ILogger<CalculationService> _logger;
+        private readonly IWeatherDataProviderService _weatherDataProviderService;
+        private readonly ILogger<ForecastCalculationService> _logger;
 
         public OpenWeatherService(IHttpClientFactory httpFactory,
             IWeatherForecastFactory weatherForecastFactory,
-            IDeserializeService deserializeService,
-            ILogger<CalculationService> logger)
+            IWeatherDataProviderService weatherDataProviderService,
+            ILogger<ForecastCalculationService> logger)
         {
-            this._httpFactory = httpFactory;
             this._weatherForecastFactory = weatherForecastFactory;
-            this._deserializeService = deserializeService;
+            this._weatherDataProviderService = weatherDataProviderService;
             this._logger = logger;
         }
         public async Task<List<WeatherForecast>> GetWeatherForecast(string url, CancellationToken cancellationToken)
@@ -32,7 +30,7 @@ namespace WeatherWatcher.Api.Services
             var forecasts = new List<WeatherForecast>();
 
             // 1. Deserialize the response.
-            var openWeatherResponse = await this._deserializeService.DeserializeJson(url, cancellationToken);
+            var openWeatherResponse = await this._weatherDataProviderService.ParseWeatherData(url, cancellationToken);
 
             // 2. Build the list of forecasts
 

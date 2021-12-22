@@ -13,14 +13,15 @@ using static WeatherWatcher.Api.Common.Constants;
 
 namespace WeatherWatcher.Services
 {
+    //[ForecastServiceExceptionFilter]
     public class ForecastService : IForecastService
     {
         private readonly OpenWeatherApiOptions _options;
-        private readonly ICalculationService _calculationService;
+        private readonly IForecastCalculationService _calculationService;
         private readonly IOpenWeatherService _openWeatherService;
 
         public ForecastService(IOptions<OpenWeatherApiOptions> options,
-            ICalculationService calculationService,
+            IForecastCalculationService calculationService,
             IOpenWeatherService openWeatherService)
         {
             this._options = options.Value;
@@ -31,7 +32,7 @@ namespace WeatherWatcher.Services
             CancellationToken cancelationtoken)
         {
             ValidateLocationInput(location);
-            string url = BuildOpenWeatherUrlByCityName(location, MeasurementUnit.metric);
+            string url = BuildOpenWeatherUrlByCityName(location, MeasurementUnit.Metric);
 
             var forecasts = await this._openWeatherService.GetWeatherForecast(url, cancelationtoken);
             var calculatedForecast = this._calculationService.CalculateAverageMetrics(forecasts);
@@ -43,14 +44,14 @@ namespace WeatherWatcher.Services
             CancellationToken cancelationtoken)
         {
             ValidateZipcodeInput(zipcode);
-            string url = BuildOpenWeatherUrlByZipCode(zipcode, MeasurementUnit.metric);
+            string url = BuildOpenWeatherUrlByZipCode(zipcode, MeasurementUnit.Metric);
             var forecasts = await this._openWeatherService.GetWeatherForecast(url, cancelationtoken);
             var calculatedForecast = this._calculationService.CalculateAverageMetrics(forecasts);
 
             return calculatedForecast;
         }
 
-        private string BuildOpenWeatherUrlByCityName(string location, MeasurementUnit unit = MeasurementUnit.metric)
+        private string BuildOpenWeatherUrlByCityName(string location, MeasurementUnit unit = MeasurementUnit.Metric)
         {
             return $"{this._options.ApiUrl}" +
                 $"q={location}" +
@@ -58,7 +59,7 @@ namespace WeatherWatcher.Services
                 $"&appid={_options.ApiKey}";
         }
 
-        private string BuildOpenWeatherUrlByZipCode(string zipCode, MeasurementUnit unit = MeasurementUnit.metric)
+        private string BuildOpenWeatherUrlByZipCode(string zipCode, MeasurementUnit unit = MeasurementUnit.Metric)
         {
             return $"{this._options.ApiUrl}" +
                 $"zip={zipCode}," +

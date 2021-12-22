@@ -3,11 +3,11 @@ using System.Net;
 
 namespace WeatherWatcher.Api.Exceptions
 {
-    public class DeserializeException : Exception
+    public class WeatherDataProviderException : Exception
     {
         public HttpStatusCode StatusCode { get; }
 
-        public DeserializeException(HttpStatusCode statusCode, string message) : base(message)
+        public WeatherDataProviderException(HttpStatusCode statusCode, string message) : base(message)
             => StatusCode = statusCode;
     }
 }
