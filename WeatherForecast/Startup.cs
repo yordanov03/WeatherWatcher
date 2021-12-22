@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
+using WeatherWatcher.Api.ExceptionFilters;
 using WeatherWatcher.Api.Factories;
 using WeatherWatcher.Api.Services;
 using WeatherWatcher.Api.Services.Contracts;
@@ -33,21 +34,23 @@ namespace WeatherWatcher
 
             services.AddControllers();
 
-            var openWeatherConfig = Configuration.GetSection(OpenWeatherApiOptions.appOptions);
+            var openWeatherConfig = Configuration.GetSection(OpenWeatherApiOptions.AppOptions);
             services.Configure<OpenWeatherApiOptions>(openWeatherConfig);
 
             services.AddScoped<IForecastService, ForecastService>();
-            services.AddScoped<ICalculationService, CalculationService>();
+            services.AddScoped<IForecastCalculationService, ForecastCalculationService>();
             services.AddScoped<IWeatherForecastFactory, WeatherForecastFactory>();
             services.AddTransient<IOpenWeatherService, OpenWeatherService>();
-            services.AddTransient<IDeserializeService, DeserializeService>();
+            services.AddTransient<IWeatherDataProviderService, WeatherDataProviderService>();
+            services.AddScoped<ForecastServiceExceptionFilter>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddHttpClient();
+            services.AddCors();
 
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WeatherForecast", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WeatherWatcher", Version = "v1" });
             });
         }
 
@@ -64,6 +67,11 @@ namespace WeatherWatcher
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin());
 
             app.UseAuthorization();
 

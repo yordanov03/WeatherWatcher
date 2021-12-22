@@ -1,5 +1,5 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using WeatherWatcher.Api.Exceptions;
 using static WeatherWatcher.Api.Common.Constants;
 
 namespace WeatherWatcher.Api.Common
@@ -34,7 +34,7 @@ namespace WeatherWatcher.Api.Common
 
             if (!string.IsNullOrEmpty(zipcode))
             {
-                validZipcode = Regex.IsMatch(zipcode, zipcodeRegex);
+                validZipcode = Regex.IsMatch(zipcode, ZipcodeRegex);
 
                 if (validZipcode)
                 {
@@ -45,11 +45,9 @@ namespace WeatherWatcher.Api.Common
             ThrowException<InvalidParameterInputException>($"{name} must be valid German zipcode.");
         }
 
-        private static void ThrowException<InvalidParameterInputException>(string message)
+        private static void ThrowException<Exception>(string message)
         {
-            var exception = new Exception(message);
-
-            throw exception;
+            throw new InvalidParameterInputException(message);
         }
     }
 }

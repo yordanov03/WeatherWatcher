@@ -7,17 +7,19 @@ using WeatherWatcher.Api.Exceptions;
 using WeatherWatcher.Api.Factories;
 using WeatherWatcher.Api.Services.Contracts;
 using WeatherWatcher.Models;
+using static WeatherWatcher.Api.Common.Constants.WeatherDescriptionConstants;
+
 
 namespace WeatherWatcher.Api.Services
 {
-    public class CalculationService : ICalculationService
+    public class ForecastCalculationService : IForecastCalculationService
     {
         private readonly IWeatherForecastFactory _weatherForecastFactory;
-        private readonly ILogger<CalculationService> _logger;
+        private readonly ILogger<ForecastCalculationService> _logger;
         private readonly IMapper _mapper;
 
-        public CalculationService(IWeatherForecastFactory weatherForecastFactory,
-            ILogger<CalculationService> logger,
+        public ForecastCalculationService(IWeatherForecastFactory weatherForecastFactory,
+            ILogger<ForecastCalculationService> logger,
             IMapper mapper)
         {
             this._weatherForecastFactory = weatherForecastFactory;
@@ -30,7 +32,7 @@ namespace WeatherWatcher.Api.Services
             {
                 var dailyForecasts = new List<WeatherForecast>();
 
-                var date = DateTime.Now.Date;
+                var datetoday = DateTime.UtcNow.ToShortDateString();
 
                 //a model to be created out of this
                 decimal temp = 0;
@@ -42,10 +44,9 @@ namespace WeatherWatcher.Api.Services
                 int humidityCount = 0;
                 int windSpeedCount = 0;
 
-
                 for (int i = 0; i < hourlyForecasts.Count; i++)
                 {
-                    if (hourlyForecasts[i].Date.Date == date)
+                    if (hourlyForecasts[i].Date == datetoday)
                     {
                         temp += hourlyForecasts[i].Temperature;
                         humidity += hourlyForecasts[i].Humidity;
@@ -55,18 +56,38 @@ namespace WeatherWatcher.Api.Services
                         humidityCount++;
                         windSpeedCount++;
                     }
-
                     else
                     {
-                        date = hourlyForecasts[i].Date.Date;
+                        datetoday = hourlyForecasts[i].Date;
 
-                        var weatherforecast = this._weatherForecastFactory
-                            .WithDate(hourlyForecasts[i - 1].Date.Date)
+                        WeatherForecast weatherforecast = null;
+
+                        //if it's not 1st or last forecast
+                        if (i > 0 && i< hourlyForecasts.Count-2)
+                        {
+                            weatherforecast = this._weatherForecastFactory
+                            .WithCity(hourlyForecasts[i].City)
+                            .WithDate(hourlyForecasts[i-1].Date)
                             .WithTemperature(Math.Ceiling(temp / tempCount))
                             .WithHumidity(Math.Ceiling(humidity / humidityCount))
                             .WithWindSpeed(Math.Ceiling(windSpeed / windSpeedCount))
-                            .WithWeatherDescription(hourlyForecasts[i - 1].WeatherDescription)
+                            .WithWeatherDescription(ModifyWeatherDescription(hourlyForecasts[i-1].WeatherDescription))
                             .Build();
+
+                            i--;
+                        }
+                        //When the last and only forecast for the day needs to be created
+                        else
+                        {
+                            weatherforecast = this._weatherForecastFactory
+                            .WithCity(hourlyForecasts[i].City)
+                            .WithDate(hourlyForecasts[i].Date)
+                            .WithTemperature(Math.Ceiling(hourlyForecasts[i].Temperature))
+                            .WithHumidity(Math.Ceiling(hourlyForecasts[i].Humidity))
+                            .WithWindSpeed(Math.Ceiling(hourlyForecasts[i].WindSpeed))
+                            .WithWeatherDescription(ModifyWeatherDescription(hourlyForecasts[i].WeatherDescription))
+                            .Build();
+                        }
 
                         dailyForecasts.Add(weatherforecast);
 
@@ -77,23 +98,19 @@ namespace WeatherWatcher.Api.Services
                         tempCount = 0;
                         humidityCount = 0;
                         windSpeedCount = 0;
-
-                        i--;
-
                     }
                 }
 
-                // calculate last day's forecast
+                // calculate average forecast when there are multipule forecast for the last day
 
                 if (tempCount > 0 || humidityCount > 0 || windSpeedCount > 0)
                 {
-
                     var lastWeatherForecast = this._weatherForecastFactory
-                        .WithDate(hourlyForecasts[hourlyForecasts.Count - 1].Date.Date)
+                        .WithDate(hourlyForecasts[hourlyForecasts.Count - 1].Date)
                         .WithTemperature(Math.Ceiling(temp / tempCount))
                         .WithHumidity(Math.Ceiling(humidity / humidityCount))
                         .WithWindSpeed(Math.Ceiling(windSpeed / windSpeedCount))
-                        .WithWeatherDescription(hourlyForecasts[hourlyForecasts.Count - 1].WeatherDescription)
+                        .WithWeatherDescription(ModifyWeatherDescription(hourlyForecasts[hourlyForecasts.Count - 1].WeatherDescription))
                         .Build();
 
                     dailyForecasts.Add(lastWeatherForecast);
@@ -108,18 +125,44 @@ namespace WeatherWatcher.Api.Services
                     this._logger.LogDebug("Mapping done successfully");
                     return dailyForecastsDto;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    this._logger.LogError("Could not map parsed forecasts");
-                    throw new CalculationException("Oops something went wrong with calculation");
+                    this._logger.LogError("Could not map parsed forecasts", e);
+                    throw new CalculationException("Could not map parsed forecasts");
                 }
 
             }
-            catch
+            catch(Exception e)
             {
-                this._logger.LogError("Could not group forecasts");
+                this._logger.LogError("Could not group forecasts", e);
                 throw new CalculationException("Oops something went wrong with calculation");
             }
+        }
+
+        private string ModifyWeatherDescription(string description)
+        {
+            var modifiedDescription = string.Empty;
+
+            if (description.Contains(Cloudy))
+            {
+                modifiedDescription = "cloudy";
+            }
+
+            else if (description.Contains(Rainy))
+            {
+                modifiedDescription = "rainy";
+            }
+            else if (description.Contains(Sunny) || description.Contains(Clear))
+            {
+                modifiedDescription = "sunny";
+            }
+
+            else if (description.Contains(Snowy))
+            {
+                modifiedDescription = "snowy";
+            }
+
+            return modifiedDescription;
         }
     }
 }

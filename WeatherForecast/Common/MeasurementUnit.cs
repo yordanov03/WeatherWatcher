@@ -2,8 +2,8 @@
 {
     public enum MeasurementUnit
     {
-        metric,
-        imperial,
-        kelvin
+        Metric,
+        Imperial,
+        Kelvin
     }
 }

@@ -16,10 +16,10 @@ namespace WeatherWatcher.Tests.Services
             //Arrange
             string url = "https://api.openweathermap.org/data/2.5/forecast?q=qwertyz&units=metric&appid=0000";
             var httpFactory = ClientBuilder.OpenWeatherClientFactory(OpenWeatherResponses.OkResponse);
-            var logger = new Mock<ILogger<DeserializeService>>();
-            var deserializeService = new DeserializeService(httpFactory, logger.Object);
+            var logger = new Mock<ILogger<WeatherDataProviderService>>();
+            var deserializeService = new WeatherDataProviderService(httpFactory, logger.Object);
             //Act
-            var result = deserializeService.DeserializeJson(url, CancellationToken.None);
+            var result = deserializeService.ParseWeatherData(url, CancellationToken.None);
 
             //Assert
             Assert.IsType<OpenWeatherResponse>(result.Result);
@@ -30,10 +30,10 @@ namespace WeatherWatcher.Tests.Services
         {
             string url = "https://api.openweathermap.org/data/2.5/forecast?q=qwertyz&units=metric&appid=0000";
             var httpFactory = ClientBuilder.OpenWeatherClientFactory(OpenWeatherResponses.NotFoundResponse);
-            var logger = new Mock<ILogger<DeserializeService>>();
-            var deserializeService = new DeserializeService(httpFactory, logger.Object);
+            var logger = new Mock<ILogger<WeatherDataProviderService>>();
+            var deserializeService = new WeatherDataProviderService(httpFactory, logger.Object);
 
-            var result = deserializeService.DeserializeJson(url, CancellationToken.None);
+            var result = deserializeService.ParseWeatherData(url, CancellationToken.None);
 
             Assert.Null(result.Result.Forecasts);
         }
@@ -43,10 +43,10 @@ namespace WeatherWatcher.Tests.Services
         {
             string url = "https://api.openweathermap.org/data/2.5/forecast?zip=123456,de&units=metric&appid=0000";
             var httpFactory = ClientBuilder.OpenWeatherClientFactory(OpenWeatherResponses.NotFoundResponse);
-            var logger = new Mock<ILogger<DeserializeService>>();
-            var deserializeService = new DeserializeService(httpFactory, logger.Object);
+            var logger = new Mock<ILogger<WeatherDataProviderService>>();
+            var deserializeService = new WeatherDataProviderService(httpFactory, logger.Object);
 
-            var result = deserializeService.DeserializeJson(url, CancellationToken.None);
+            var result = deserializeService.ParseWeatherData(url, CancellationToken.None);
 
             Assert.Null(result.Result.Forecasts);
         }
