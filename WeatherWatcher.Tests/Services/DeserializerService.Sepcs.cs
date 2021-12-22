@@ -19,7 +19,7 @@ namespace WeatherWatcher.Tests.Services
             var logger = new Mock<ILogger<WeatherDataProviderService>>();
             var deserializeService = new WeatherDataProviderService(httpFactory, logger.Object);
             //Act
-            var result = deserializeService.DeserializeJson(url, CancellationToken.None);
+            var result = deserializeService.ParseWeatherData(url, CancellationToken.None);
 
             //Assert
             Assert.IsType<OpenWeatherResponse>(result.Result);
@@ -33,7 +33,7 @@ namespace WeatherWatcher.Tests.Services
             var logger = new Mock<ILogger<WeatherDataProviderService>>();
             var deserializeService = new WeatherDataProviderService(httpFactory, logger.Object);
 
-            var result = deserializeService.DeserializeJson(url, CancellationToken.None);
+            var result = deserializeService.ParseWeatherData(url, CancellationToken.None);
 
             Assert.Null(result.Result.Forecasts);
         }
@@ -46,7 +46,7 @@ namespace WeatherWatcher.Tests.Services
             var logger = new Mock<ILogger<WeatherDataProviderService>>();
             var deserializeService = new WeatherDataProviderService(httpFactory, logger.Object);
 
-            var result = deserializeService.DeserializeJson(url, CancellationToken.None);
+            var result = deserializeService.ParseWeatherData(url, CancellationToken.None);
 
             Assert.Null(result.Result.Forecasts);
         }

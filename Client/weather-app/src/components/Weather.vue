@@ -78,8 +78,7 @@
       <div
         v-for="(weather, index) in weatherHistory"
         :key="weather.date"
-        class="flex"
-      >
+        class="flex">
         <div v-for="w in weather" :key="w.date">
           <div class="weather">
             <div class="current">
@@ -166,19 +165,25 @@ export default {
   methods: {
     fetch() {
       axios
-        .get("https://localhost:5001/WeatherForecast", {
+        .get("https://localhost:5001/api/Weather/forecast", {
           params: this.axiosParams,
         })
         .then((response) => {
-          this.weatherForecast = response.data;
+         if(response.data.length >0){
+            this.weatherForecast = response.data;
           this.weatherHistory.push(this.weatherForecast);
           this.addToLocalStorage(
             "weather-history",
             JSON.stringify(this.weatherHistory)
           );
+         }
+         else if(response.data.errorCode === "400"){
+           this.invalidMessage();
+         }
         })
         .catch((e) => {
           this.invalidMessage(e);
+          return e;
         });
     },
     searchWeather() {
@@ -194,11 +199,6 @@ export default {
         this.showError = false;
       }, 5000);
     },
-  },
-  determineAnimation(description) {
-    if (description == "overcast cloudy") {
-      this.overcastCloudy = "cloudy";
-    }
   },
 };
 </script>
@@ -230,7 +230,7 @@ export default {
 }
 .current-weather {
   color: #fff;
-  background-color: #f68d2e;
+  background-color: #c7f1ca;
 }
 .date {
   font-size: 1.2rem;
@@ -277,8 +277,8 @@ export default {
   display: flex;
   flex-flow: row wrap;
   background-repeat: repeat-x;
-  color: white;
-  text-shadow: 1px 1px #f68d2e;
+  color: rgb(223, 76, 76);
+  text-shadow: 1px 1px #dcf5cb;
 }
 
 .weather .current .info {
@@ -358,16 +358,16 @@ export default {
 
 .weather .future .day {
   color: #fff;
-  background-color: #f68d2e;
+  background-color: #d5f1c5;
 }
 
-.weather .future .day h3 {
+/* .weather .future .day h3 {
   text-transform: uppercase;
-}
+} */
 
-.weather .future .day p {
+/* .weather .future .day p {
   font-size: 28px;
-}
+} */
 
 .flex {
   display: flex;
@@ -379,73 +379,7 @@ export default {
   margin-right: 0.5em;
   padding-left: 1.3em;
 }
-/* footer */
-footer {
-  background: #222;
-  color: #aaa;
-  padding-top: 10px;
-}
 
-footer a {
-  color: #aaa;
-}
-
-footer a:hover {
-  color: #fff;
-}
-
-footer h3 {
-  color: #0894d1;
-  letter-spacing: 1px;
-  margin: 30px 0 20px;
-}
-
-footer .three-column {
-  overflow: hidden;
-}
-
-footer .three-column li {
-  width: 33.3333%;
-  float: left;
-  padding: 5px 0;
-}
-
-footer .socila-list {
-  overflow: hidden;
-  margin: 20px 0 10px;
-}
-
-footer .socila-list li {
-  float: left;
-  margin-right: 3px;
-  opacity: 0.7;
-  overflow: hidden;
-  border-radius: 50%;
-  transition: all 0.3s ease-in-out;
-}
-
-footer .socila-list li:hover {
-  opacity: 1;
-}
-
-footer .img-thumbnail {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid #444;
-  margin-bottom: 5px;
-}
-
-footer .copyright {
-  padding: 15px 0;
-  background: #333;
-  margin-top: 20px;
-  font-size: 15px;
-}
-
-footer .copyright span {
-  color: #0894d1;
-}
-
-/* weather */
 .icon.bigger {
   width: 57px;
   height: 57px;

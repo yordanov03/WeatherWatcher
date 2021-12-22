@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -40,8 +41,9 @@ namespace WeatherWatcher.Api.Services
 
             else
             {
-                this._logger.LogError("Could not map response to a model");
-                throw new DeserializeException(response.StatusCode, "Error response from OpenWeatherApi: " + response.ReasonPhrase);
+                response.StatusCode = HttpStatusCode.NoContent;
+                this._logger.LogError("Could not fetch data from Api");
+                throw new WeatherDataProviderException(response.StatusCode, "Error response from OpenWeatherApi: " + response.ReasonPhrase);
             }
         }
 

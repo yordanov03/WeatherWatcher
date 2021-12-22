@@ -128,7 +128,7 @@ namespace WeatherWatcher.Api.Services
                 catch (Exception e)
                 {
                     this._logger.LogError("Could not map parsed forecasts", e);
-                    throw new CalculationException("Oops something went wrong with calculation");
+                    throw new CalculationException("Could not map parsed forecasts");
                 }
 
             }

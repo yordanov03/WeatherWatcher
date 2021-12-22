@@ -16,7 +16,7 @@ namespace WeatherWatcher.Tests
         {
             //Arrange
             var forecastService = new Mock<IForecastService>();
-            var weatherforecastController = new WeatherForecastController(forecastService.Object);
+            var weatherforecastController = new WeatherController(forecastService.Object);
             var searchKey = new SearchParams { City = "berlin" };
 
             //Act
@@ -32,7 +32,7 @@ namespace WeatherWatcher.Tests
         {
             //Arrange
             var forecastService = new Mock<IForecastService>();
-            var weatherforecastController = new WeatherForecastController(forecastService.Object);
+            var weatherforecastController = new WeatherController(forecastService.Object);
             var searchKey = new SearchParams { ZipCode = "12045" };
 
             //Act
@@ -48,7 +48,7 @@ namespace WeatherWatcher.Tests
         {
             //Arrange
             var forecastService = new Mock<IForecastService>();
-            var weatherforecastController = new WeatherForecastController(forecastService.Object);
+            var weatherforecastController = new WeatherController(forecastService.Object);
             var searchKey = new SearchParams { ZipCode = "120456" };
 
             //Act
@@ -63,7 +63,7 @@ namespace WeatherWatcher.Tests
         {
             //Arrange
             var forecastService = new Mock<IForecastService>();
-            var weatherforecastController = new WeatherForecastController(forecastService.Object);
+            var weatherforecastController = new WeatherController(forecastService.Object);
 
             //Act
             var exception = Record.ExceptionAsync(() => weatherforecastController.GetWeatherForecast(null, CancellationToken.None));
@@ -77,7 +77,7 @@ namespace WeatherWatcher.Tests
         {
             //Arrange
             var forecastService = new Mock<IForecastService>();
-            var weatherforecastController = new WeatherForecastController(forecastService.Object);
+            var weatherforecastController = new WeatherController(forecastService.Object);
             var searchKey = new SearchParams { City = "b" };
 
             //Act
@@ -92,7 +92,7 @@ namespace WeatherWatcher.Tests
         {
             //Arrange
             var forecastService = new Mock<IForecastService>();
-            var weatherforecastController = new WeatherForecastController(forecastService.Object);
+            var weatherforecastController = new WeatherController(forecastService.Object);
             var searchKey = new SearchParams { City = "qwertyuiopasdfghjklzxcvbnm" };
 
             //Act

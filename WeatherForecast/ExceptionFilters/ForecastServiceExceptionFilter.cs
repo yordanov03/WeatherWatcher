@@ -1,28 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using WeatherWatcher.Api.Exceptions;
+using WeatherWatcher.Api.Models;
 
 namespace WeatherWatcher.Api.ExceptionFilters
 {
     public class ForecastServiceExceptionFilter : IExceptionFilter
     {
-        private readonly IModelMetadataProvider _modelMetadataProvider;
-
-        public ForecastServiceExceptionFilter(IModelMetadataProvider modelMetadataProvider)
-        {
-            _modelMetadataProvider = modelMetadataProvider;
-        }
-
         public void OnException(ExceptionContext context)
         {
-            var result = new ViewResult { ViewName = "ForecastServiceException" };
-            result.ViewData = new ViewDataDictionary(_modelMetadataProvider,
-                                                        context.ModelState);
-            result.ViewData.Add("Exception", context.Exception);
-            // TODO: Pass additional detailed data via ViewData
-            context.Result = result;
-            context.ExceptionHandled = true;
+            var result = new ErrorResponse();
+
+            if(context.Exception is InvalidParameterInputException ||
+                context.Exception is WeatherDataProviderException)
+            {
+                result = new ErrorResponse
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Invalid input"
+                };
+                context.HttpContext.Response.StatusCode = 200;
+            }
+            else
+            {
+                result = new ErrorResponse
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Something went wrong!"
+                };
+                System.Console.WriteLine(context.Exception.GetType()); ;
+                context.HttpContext.Response.StatusCode = 500;
+            }
+            context.Result = new JsonResult(result);
+            //context.ExceptionHandled = true;
         }
     }
 }

@@ -44,7 +44,6 @@ namespace WeatherWatcher.Tests.Services
             Assert.Equal(86, result[0].Humidity);
             Assert.Equal(2, result[0].WindSpeed);
             Assert.Equal("cloudy", result[0].WeatherDescription);
-            Assert.Equal(DateTime.Now.Date, result[0].Date.Date);
 
         }
 
