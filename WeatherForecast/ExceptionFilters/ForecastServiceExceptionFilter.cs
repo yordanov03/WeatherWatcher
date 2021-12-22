@@ -17,20 +17,18 @@ namespace WeatherWatcher.Api.ExceptionFilters
                 result = new ErrorResponse
                 {
                     ErrorCode = "400",
-                    ErrorMessage = "Invalid input"
+                    ErrorMessage = "Invalid input!"
                 };
-                context.HttpContext.Response.StatusCode = 200;
             }
             else
             {
                 result = new ErrorResponse
                 {
                     ErrorCode = "500",
-                    ErrorMessage = "Something went wrong!"
+                    ErrorMessage = "Something went wrong with the server!"
                 };
-                System.Console.WriteLine(context.Exception.GetType()); ;
-                context.HttpContext.Response.StatusCode = 500;
             }
+            context.HttpContext.Response.StatusCode = 200;
             context.Result = new JsonResult(result);
         }
     }

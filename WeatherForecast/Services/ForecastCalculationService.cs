@@ -62,7 +62,7 @@ namespace WeatherWatcher.Api.Services
 
                         WeatherForecast weatherforecast = null;
 
-                        //if its not 1st or last forecast
+                        //if it's not 1st or last forecast
                         if (i > 0 && i< hourlyForecasts.Count-2)
                         {
                             weatherforecast = this._weatherForecastFactory

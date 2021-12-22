@@ -42,15 +42,15 @@ namespace WeatherWatcher
             services.AddScoped<IWeatherForecastFactory, WeatherForecastFactory>();
             services.AddTransient<IOpenWeatherService, OpenWeatherService>();
             services.AddTransient<IWeatherDataProviderService, WeatherDataProviderService>();
+            services.AddScoped<ForecastServiceExceptionFilter>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddHttpClient();
             services.AddCors();
-            services.AddScoped<ForecastServiceExceptionFilter>();
 
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WeatherForecast", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WeatherWatcher", Version = "v1" });
             });
         }
 
