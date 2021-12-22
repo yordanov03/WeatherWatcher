@@ -32,7 +32,6 @@ namespace WeatherWatcher.Api.ExceptionFilters
                 context.HttpContext.Response.StatusCode = 500;
             }
             context.Result = new JsonResult(result);
-            //context.ExceptionHandled = true;
         }
     }
 }
